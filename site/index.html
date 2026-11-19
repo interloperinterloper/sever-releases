@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vocalsplit</title>
+<meta name="description" content="Split any song into vocals and music on your own GPU. Also finds BPM and key. Free, local, private.">
+<style>
+  :root { --bg:#0f0f12; --card:#18181d; --line:#26262e; --text:#e8e6e1; --dim:#7d7b85; --vox:#ff6b4a; --mus:#f0c35a; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.55 system-ui,sans-serif; }
+  main { max-width:760px; margin:0 auto; padding:64px 20px 80px; }
+  h1 { margin:0 0 6px; font:600 28px ui-monospace,Consolas,monospace; letter-spacing:-.02em; }
+  h1 i { color:var(--vox); font-style:normal; }
+  .lead { font-size:20px; color:var(--text); margin:18px 0 8px; max-width:34em; }
+  .sub { color:var(--dim); margin:0 0 32px; }
+  .bars { display:flex; gap:3px; align-items:center; height:56px; margin:28px 0; }
+  .bars span { width:3px; border-radius:2px; background:var(--vox); }
+  .bars span:nth-child(odd) { background:var(--mus); }
+  .dl { display:inline-flex; flex-direction:column; gap:2px; background:var(--vox); color:#1a0d09; padding:14px 26px; border-radius:12px; text-decoration:none; font-weight:600; }
+  .dl small { font-weight:400; opacity:.75; font-size:13px; }
+  .dl.off { background:#2a2a33; color:var(--dim); pointer-events:none; }
+  h2 { font-size:13px; text-transform:uppercase; letter-spacing:.1em; color:var(--dim); font-weight:500; margin:56px 0 14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin-bottom:10px; }
+  .card h3 { margin:0 0 4px; font-size:16px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .card h3 span { color:var(--dim); font:13px ui-monospace,Consolas,monospace; font-weight:400; }
+  .card ul { margin:6px 0 0; padding-left:20px; color:#cfcdc8; }
+  .card p { margin:6px 0 0; color:#cfcdc8; }
+  ol, .req { color:#cfcdc8; padding-left:22px; }
+  .req li, ol li { margin-bottom:6px; }
+  a { color:var(--vox); }
+  footer { margin-top:64px; color:var(--dim); font-size:13px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>vocal<i>/</i>split</h1>
+  <p class="lead">Drop in a song. Get the vocals and the music as separate tracks, plus BPM and key.</p>
+  <p class="sub">Runs on your own GPU. Free, offline, nothing leaves your computer.</p>
+
+  <div class="bars" id="bars" aria-hidden="true"></div>
+
+  <a class="dl off" id="dl" href="https://github.com/interloperinterloper/vocalsplit-releases/releases/latest">Download<small id="dlmeta">Looking for the latest version...</small></a>
+
+  <h2>How it works</h2>
+  <ol>
+    <li>Run the installer. It sets everything up and downloads the AI model on first start.</li>
+    <li>Drop a song into the window.</li>
+    <li>Mute either track while it plays, download vocals or music, or open an old split from your history.</li>
+  </ol>
+
+  <h2>Needs</h2>
+  <ul class="req">
+    <li>Windows 10 or 11, 64-bit</li>
+    <li>An NVIDIA graphics card (RTX 50-series supported). Without one it still works, just slowly.</li>
+    <li>About 4 GB of disk space and an internet connection for the first setup</li>
+  </ul>
+
+  <h2>Changelog</h2>
+  <div id="log"><div class="card"><p>Loading...</p></div></div>
+
+  <footer>Made by interloper. <a href="https://github.com/interloperinterloper/vocalsplit-releases/releases">All releases on GitHub</a></footer>
+</main>
+
+<script>
+const REPO = "interloperinterloper/vocalsplit-releases";
+const $ = s => document.querySelector(s);
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+
+// decorative waveform
+$("#bars").innerHTML = Array.from({ length: 64 }, (_, i) =>
+  `<span style="height:${6 + Math.round(Math.abs(Math.sin(i * .37) * Math.cos(i * .11)) * 50)}px"></span>`).join("");
+
+// tiny markdown: "- item" lists, "## heading" lines, plain paragraphs
+function md(body) {
+  let html = "", inList = false;
+  for (const raw of (body || "").split(/\r?\n/)) {
+    const line = raw.trim(), li = line.match(/^[-*]\s+(.*)/);
+    if (li) { if (!inList) { html += "<ul>"; inList = true; } html += `<li>${esc(li[1])}</li>`; continue; }
+    if (inList) { html += "</ul>"; inList = false; }
+    if (line) html += `<p>${esc(line.replace(/^#+\s*/, ""))}</p>`;
+  }
+  return html + (inList ? "</ul>" : "");
+}
+
+(async () => {
+  try {
+    const r = await fetch(`https://api.github.com/repos/${REPO}/releases`);
+    if (!r.ok) throw new Error(r.status);
+    const rels = (await r.json()).filter(x => !x.draft && !x.prerelease);
+    if (!rels.length) throw new Error("none");
+    const exe = rels[0].assets.find(a => a.name.endsWith(".exe"));
+    if (exe) {
+      const d = $("#dl"); d.href = exe.browser_download_url; d.classList.remove("off");
+      d.innerHTML = `Download for Windows<small>${esc(rels[0].tag_name)} &middot; ${(exe.size / 1048576).toFixed(0)} MB installer &middot; ${new Date(rels[0].published_at).toLocaleDateString()}</small>`;
+    }
+    $("#log").innerHTML = rels.map(x => `<div class="card"><h3>${esc(x.name || x.tag_name)}<span>${new Date(x.published_at).toLocaleDateString()}</span></h3>${md(x.body)}</div>`).join("");
+  } catch (e) {
+    $("#dlmeta").textContent = "See all releases on GitHub";
+    $("#log").innerHTML = '<div class="card"><p>Could not load the changelog. See <a href="https://github.com/interloperinterloper/vocalsplit-releases/releases">GitHub releases</a>.</p></div>';
+  }
+})();
+</script>
+</body>
+</html>
