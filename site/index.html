@@ -5,71 +5,99 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>vocalsplit</title>
 <meta name="description" content="Split any song into vocals and music on your own GPU. Also finds BPM and key. Free, local, private.">
+<meta name="theme-color" content="#0b0a09">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23ff6b4a' d='M3 12h3v8H3zM9 7h3v18H9zM15 3h3v12h-3z'/%3E%3Cpath fill='%23f0c35a' d='M18 19h3v10h-3zM24 11h3v14h-3z'/%3E%3C/svg%3E">
 <style>
-  :root { --bg:#0f0f12; --card:#18181d; --line:#26262e; --text:#e8e6e1; --dim:#7d7b85; --vox:#ff6b4a; --mus:#f0c35a; }
+  :root { --black:#0b0a09; --text:#f4f2ed; --body:#bdb9b1; --muted:#8c8880; --faint:#57544f; --edge:#f4f2ed1a; --edge2:#f4f2ed38;
+    --vox:#ff6b4a; --mus:#f0c35a; --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace; color-scheme:dark; }
   * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.55 system-ui,sans-serif; }
-  main { max-width:760px; margin:0 auto; padding:64px 20px 80px; }
-  h1 { margin:0 0 6px; font:600 28px ui-monospace,Consolas,monospace; letter-spacing:-.02em; }
-  h1 i { color:var(--vox); font-style:normal; }
-  .lead { font-size:20px; color:var(--text); margin:18px 0 8px; max-width:34em; }
-  .sub { color:var(--dim); margin:0 0 32px; }
-  .bars { display:flex; gap:3px; align-items:center; height:56px; margin:28px 0; }
-  .bars span { width:3px; border-radius:2px; background:var(--vox); }
-  .bars span:nth-child(odd) { background:var(--mus); }
-  .dl { display:inline-flex; flex-direction:column; gap:2px; background:var(--vox); color:#1a0d09; padding:14px 26px; border-radius:12px; text-decoration:none; font-weight:600; }
-  .dl small { font-weight:400; opacity:.75; font-size:13px; }
-  .dl.off { background:#2a2a33; color:var(--dim); pointer-events:none; }
-  h2 { font-size:13px; text-transform:uppercase; letter-spacing:.1em; color:var(--dim); font-weight:500; margin:56px 0 14px; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin-bottom:10px; }
-  .card h3 { margin:0 0 4px; font-size:16px; display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-  .card h3 span { color:var(--dim); font:13px ui-monospace,Consolas,monospace; font-weight:400; }
-  .card ul { margin:6px 0 0; padding-left:20px; color:#cfcdc8; }
-  .card p { margin:6px 0 0; color:#cfcdc8; }
-  ol, .req { color:#cfcdc8; padding-left:22px; }
-  .req li, ol li { margin-bottom:6px; }
+  ::selection { background:var(--vox); color:var(--black); }
+  html, body { margin:0; background:var(--black); color:var(--body); -webkit-font-smoothing:antialiased; font:15px/1.55 Archivo, system-ui, sans-serif; font-stretch:92%; }
+  body { position:relative; overflow-x:hidden; }
+  .mono, h2, .dl small { font-family:var(--mono); font-size:10.5px; letter-spacing:.04em; text-transform:uppercase; font-stretch:normal; }
+  .field { position:fixed; inset:0; pointer-events:none;
+    background:radial-gradient(circle, var(--faint) .9px, transparent 1.2px) 0 0/14px 14px;
+    -webkit-mask:radial-gradient(ellipse 70% 60% at 30% 45%, transparent 20%, #000 75%); mask:radial-gradient(ellipse 70% 60% at 30% 45%, transparent 20%, #000 75%); }
+  .mosh { position:fixed; left:0; right:0; height:14px; pointer-events:none;
+    background:radial-gradient(circle, var(--text) .9px, transparent 1.2px) 0 0/14px 14px; opacity:.5; animation:mosh 2.4s steps(1,end) infinite; }
+  .mosh.a { top:28%; } .mosh.b { top:61%; height:28px; animation-delay:-1.1s; background-image:radial-gradient(circle, var(--vox) .9px, transparent 1.2px); opacity:.6; }
+  @keyframes mosh { 0% { transform:translateX(0); clip-path:inset(0 60% 0 0); } 12% { transform:translateX(42px); clip-path:inset(0 20% 0 35%); }
+    24% { transform:translateX(-28px); clip-path:inset(0 70% 0 5%); } 36% { transform:translateX(0); clip-path:inset(0 100% 0 0); } }
+  body::after { content:""; position:fixed; inset:0; pointer-events:none; opacity:.06; mix-blend-mode:overlay;
+    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+
+  main { position:relative; z-index:1; max-width:1200px; margin:0 auto; padding:0 clamp(16px,3vw,32px); }
+  .hero { min-height:78vh; display:grid; grid-template-columns:repeat(4,1fr); gap:16px; align-items:center; }
+  .hero > div { grid-column:2 / span 2; max-width:460px; animation:in 260ms cubic-bezier(.2,0,0,1) both; }
+  @keyframes in { from { opacity:0; transform:translateY(10px); } }
+  .logo { width:56px; height:56px; display:block; }
+  h1 { margin:22px 0 10px; color:var(--text); font-weight:600; font-size:34px; line-height:1; letter-spacing:-.025em; font-stretch:75%; }
+  .lead { margin:0 0 28px; color:var(--body); font-size:16px; }
+  .dl { display:flex; justify-content:space-between; align-items:center; gap:16px; background:var(--vox); color:var(--black); padding:14px; border-radius:2px;
+    text-decoration:none; font:500 10.5px var(--mono); letter-spacing:.04em; text-transform:uppercase; transition:background 90ms; }
+  .dl:hover { background:var(--text); }
+  .dl span { white-space:nowrap; } .dl small { font-weight:400; opacity:.7; text-align:right; }
+  .dl.off { background:transparent; color:var(--muted); border:1px solid var(--edge2); pointer-events:none; }
+
+  section { position:relative; z-index:1; max-width:460px; margin:0 0 56px 25%; }
+  h2 { color:var(--muted); font-weight:500; margin:0 0 12px; padding-top:8px; border-top:1px solid var(--edge2); }
+  ol, ul.req { margin:0; padding-left:20px; color:var(--body); } li { margin-bottom:6px; }
+  .card { border-bottom:1px solid var(--edge); padding:0 0 14px; margin-bottom:14px; }
+  .card h3 { margin:0 0 4px; font-size:15px; font-weight:500; color:var(--text); display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .card h3 span { color:var(--muted); font:11px var(--mono); }
+  .card ul { margin:6px 0 0; padding-left:20px; } .card p { margin:6px 0 0; }
   a { color:var(--vox); }
-  footer { margin-top:64px; color:var(--dim); font-size:13px; }
+
+  .word { position:relative; z-index:1; display:block; color:var(--text); font-weight:850; font-stretch:62%; font-size:min(24vw, 36vh); line-height:.74; letter-spacing:-.045em;
+    margin:.08em 0 -.06em -.03em; padding:0 clamp(10px,2vw,24px); white-space:nowrap; user-select:none; overflow:hidden; border-top:1px solid var(--edge2); padding-top:.12em; }
+  .word i { font-style:normal; color:var(--vox); }
+  @media (max-width:760px) { .hero { grid-template-columns:1fr; min-height:0; padding:64px 0 40px; } .hero > div { grid-column:1; } section { margin-left:0; } .word { font-size:25vw; } }
+  @media (prefers-reduced-motion:reduce) { .hero > div, .mosh { animation:none; } }
 </style>
 </head>
 <body>
+<div class="field" aria-hidden="true"></div><div class="mosh a" aria-hidden="true"></div><div class="mosh b" aria-hidden="true"></div>
 <main>
-  <h1>vocal<i>/</i>split</h1>
-  <p class="lead">Drop in a song. Get the vocals and the music as separate tracks, plus BPM and key.</p>
-  <p class="sub">Runs on your own GPU. Free, offline, nothing leaves your computer.</p>
+  <div class="hero"><div>
+    <svg class="logo" viewBox="0 0 44 44" role="img" aria-label="vocalsplit">
+      <defs><clipPath id="L"><polygon points="0,0 27,0 17,44 0,44"/></clipPath><clipPath id="R"><polygon points="31,0 44,0 44,44 21,44"/></clipPath></defs>
+      <g clip-path="url(#L)" fill="#ff6b4a"><rect x="2" y="16" width="5" height="12" rx="2"/><rect x="10" y="8" width="5" height="28" rx="2"/><rect x="18" y="2" width="5" height="40" rx="2"/></g>
+      <g clip-path="url(#R)" fill="#f0c35a"><rect x="22" y="12" width="5" height="20" rx="2"/><rect x="30" y="6" width="5" height="32" rx="2"/><rect x="38" y="15" width="5" height="14" rx="2"/></g>
+    </svg>
+    <h1>Split any song.</h1>
+    <p class="lead">Drop in a song and get the vocals and the music as separate tracks, plus BPM and key. Runs on your own GPU, free and offline.</p>
+    <a class="dl off" id="dl" href="https://github.com/interloperinterloper/vocalsplit-releases/releases/latest"><span>Download</span><small id="dlmeta">Looking for the latest version...</small></a>
+  </div></div>
 
-  <div class="bars" id="bars" aria-hidden="true"></div>
-
-  <a class="dl off" id="dl" href="https://github.com/interloperinterloper/vocalsplit-releases/releases/latest">Download<small id="dlmeta">Looking for the latest version...</small></a>
-
-  <h2>How it works</h2>
-  <ol>
-    <li>Run the installer. It sets everything up and downloads the AI model on first start.</li>
-    <li>Drop a song into the window.</li>
-    <li>Mute either track while it plays, download vocals or music, or open an old split from your history.</li>
-  </ol>
-
-  <h2>Needs</h2>
-  <ul class="req">
-    <li>Windows 10 or 11, 64-bit</li>
-    <li>An NVIDIA graphics card (RTX 50-series supported). Without one it still works, just slowly.</li>
-    <li>About 4 GB of disk space and an internet connection for the first setup</li>
-  </ul>
-
-  <h2>Changelog</h2>
-  <div id="log"><div class="card"><p>Loading...</p></div></div>
-
-  <footer>Made by interloper. <a href="https://github.com/interloperinterloper/vocalsplit-releases/releases">All releases on GitHub</a></footer>
+  <section>
+    <h2>How it works</h2>
+    <ol>
+      <li>Run the installer. It sets everything up and downloads the AI model on first start.</li>
+      <li>Drop a song into the window.</li>
+      <li>Mute either track while it plays, download vocals or music, or open an old split from your history.</li>
+    </ol>
+  </section>
+  <section>
+    <h2>Needs</h2>
+    <ul class="req">
+      <li>Windows 10 or 11, 64-bit</li>
+      <li>An NVIDIA graphics card (RTX 50-series supported). Without one it still works, just slowly.</li>
+      <li>About 4 GB of disk space and an internet connection for the first setup</li>
+    </ul>
+  </section>
+  <section>
+    <h2>Changelog</h2>
+    <div id="log"><div class="card"><p>Loading...</p></div></div>
+  </section>
 </main>
+<span class="word" aria-hidden="true">vocal<i>/</i>split</span>
 
 <script>
 const REPO = "interloperinterloper/vocalsplit-releases";
 const $ = s => document.querySelector(s);
 const esc = s => s.replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
-
-// decorative waveform
-$("#bars").innerHTML = Array.from({ length: 64 }, (_, i) =>
-  `<span style="height:${6 + Math.round(Math.abs(Math.sin(i * .37) * Math.cos(i * .11)) * 50)}px"></span>`).join("");
 
 // tiny markdown: "- item" lists, "## heading" lines, plain paragraphs
 function md(body) {
@@ -92,7 +120,7 @@ function md(body) {
     const exe = rels[0].assets.find(a => a.name.endsWith(".exe"));
     if (exe) {
       const d = $("#dl"); d.href = exe.browser_download_url; d.classList.remove("off");
-      d.innerHTML = `Download for Windows<small>${esc(rels[0].tag_name)} &middot; ${(exe.size / 1048576).toFixed(0)} MB installer &middot; ${new Date(rels[0].published_at).toLocaleDateString()}</small>`;
+      d.innerHTML = `<span>Download for Windows</span><small>${esc(rels[0].tag_name)} &middot; ${(exe.size / 1048576).toFixed(0)} MB installer &middot; ${new Date(rels[0].published_at).toLocaleDateString()}</small>`;
     }
     $("#log").innerHTML = rels.map(x => `<div class="card"><h3>${esc(x.name || x.tag_name)}<span>${new Date(x.published_at).toLocaleDateString()}</span></h3>${md(x.body)}</div>`).join("");
   } catch (e) {
