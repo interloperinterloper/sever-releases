@@ -8,15 +8,15 @@
 <meta name="theme-color" content="#0b0a09">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cdefs%3E%3CclipPath id='A'%3E%3Crect width='24' height='48'/%3E%3C/clipPath%3E%3CclipPath id='B'%3E%3Crect x='24' width='24' height='48'/%3E%3C/clipPath%3E%3Cg id='rec'%3E%3Ccircle cx='24' cy='24' r='16' fill='%23f4f2ed'/%3E%3Ccircle cx='24' cy='24' r='12.2' fill='none' stroke='%230b0a09' stroke-width='.9'/%3E%3Ccircle cx='24' cy='24' r='9.6' fill='none' stroke='%230b0a09' stroke-width='.9'/%3E%3Ccircle cx='24' cy='24' r='5.2' fill='%23e01b2b'/%3E%3Ccircle cx='24' cy='24' r='1.2' fill='%230b0a09'/%3E%3C/g%3E%3C/defs%3E%3Crect width='48' height='48' rx='10' fill='%230b0a09'/%3E%3Cg transform='rotate(22 24 24)'%3E%3Cg transform='translate(-2.4 -2.2)'%3E%3Cg clip-path='url(%23A)'%3E%3Cuse href='%23rec'/%3E%3C/g%3E%3C/g%3E%3Cg transform='translate(2.4 2.2)'%3E%3Cg clip-path='url(%23B)'%3E%3Cuse href='%23rec'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48' fill='none'%3E%3Cdefs%3E%3CclipPath id='A'%3E%3Crect width='24' height='48'/%3E%3C/clipPath%3E%3CclipPath id='B'%3E%3Crect x='24' width='24' height='48'/%3E%3C/clipPath%3E%3Cg id='rec'%3E%3Ccircle cx='24' cy='24' r='16' fill='%23f4f2ed'/%3E%3Ccircle cx='24' cy='24' r='12.2' fill='none' stroke='%230b0a09' stroke-width='.9'/%3E%3Ccircle cx='24' cy='24' r='9.6' fill='none' stroke='%230b0a09' stroke-width='.9'/%3E%3Ccircle cx='24' cy='24' r='5.2' fill='%23e01b2b'/%3E%3Ccircle cx='24' cy='24' r='1.2' fill='%230b0a09'/%3E%3C/g%3E%3C/defs%3E%3Crect width='48' height='48' rx='10' fill='%230b0a09'/%3E%3Cg transform='rotate(22 24 24)'%3E%3Cg transform='translate(-2.4 -2.2)'%3E%3Cg clip-path='url(%23A)'%3E%3Cuse href='%23rec'/%3E%3C/g%3E%3C/g%3E%3Cg transform='translate(2.4 2.2)'%3E%3Cg clip-path='url(%23B)'%3E%3Cuse href='%23rec'/%3E%3C/g%3E%3C/g%3E%3Crect x='23' y='1.5' width='2' height='45' rx='1' fill='%23e01b2b'/%3E%3C/g%3E%3C/svg%3E">
 <style>
   :root { --black:#0b0a09; --text:#f4f2ed; --body:#bdb9b1; --muted:#8c8880; --faint:#57544f; --edge:#f4f2ed1a; --edge2:#f4f2ed38;
-    --vox:#e01b2b; --mus:#e01b2b; --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace; color-scheme:dark; }
+    --vox:#e01b2b; --dltext:#fff; --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace; color-scheme:dark; }
   * { box-sizing:border-box; }
   ::selection { background:var(--vox); color:var(--black); }
   html, body { margin:0; background:var(--black); color:var(--body); -webkit-font-smoothing:antialiased; font:15px/1.55 Archivo, system-ui, sans-serif; font-stretch:92%; }
-  body { position:relative; overflow-x:hidden; }
-  .mono, h2, .dl small { font-family:var(--mono); font-size:10.5px; letter-spacing:.04em; text-transform:uppercase; font-stretch:normal; }
+  body { position:relative; min-height:100vh; display:grid; grid-template-rows:1fr auto; overflow-x:hidden; }
+  .mono, h2, .dl small, .more, .label { font-family:var(--mono); font-size:10.5px; letter-spacing:.04em; text-transform:uppercase; font-stretch:normal; }
   .field { position:fixed; inset:0; pointer-events:none;
     background:radial-gradient(circle, var(--faint) .9px, transparent 1.2px) 0 0/14px 14px;
     -webkit-mask:radial-gradient(ellipse 70% 60% at 30% 45%, transparent 20%, #000 75%); mask:radial-gradient(ellipse 70% 60% at 30% 45%, transparent 20%, #000 75%); }
@@ -27,71 +27,90 @@
     24% { transform:translateX(-28px); clip-path:inset(0 70% 0 5%); } 36% { transform:translateX(0); clip-path:inset(0 100% 0 0); } }
   body::after { content:""; position:fixed; inset:0; pointer-events:none; opacity:.06; mix-blend-mode:overlay;
     background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
-
-  main { position:relative; z-index:1; max-width:1200px; margin:0 auto; padding:0 clamp(16px,3vw,32px); }
-  .hero { min-height:78vh; display:grid; grid-template-columns:repeat(4,1fr); gap:16px; align-items:center; }
-  .hero > div { grid-column:2 / span 2; max-width:460px; animation:in 260ms cubic-bezier(.2,0,0,1) both; }
-  @keyframes in { from { opacity:0; transform:translateY(10px); } }
-  .logo { width:76px; height:76px; display:block; }
-  h1 { margin:22px 0 10px; color:var(--text); font-weight:600; font-size:34px; line-height:1; letter-spacing:-.025em; font-stretch:75%; }
-  .lead { margin:0 0 28px; color:var(--body); font-size:16px; }
-  .dl { display:flex; justify-content:space-between; align-items:center; gap:16px; background:var(--vox); color:#fff; padding:14px; border-radius:2px;
-    text-decoration:none; font:500 10.5px var(--mono); letter-spacing:.04em; text-transform:uppercase; transition:background 90ms; }
-  .dl:hover { background:var(--text); }
-  .dl span { white-space:nowrap; } .dl small { font-weight:400; opacity:.7; text-align:right; }
-  .dl.off { background:transparent; color:var(--muted); border:1px solid var(--edge2); pointer-events:none; }
-
-  section { position:relative; z-index:1; max-width:460px; margin:0 0 56px 25%; }
-  h2 { color:var(--muted); font-weight:500; margin:0 0 12px; padding-top:8px; border-top:1px solid var(--edge2); }
-  ol, ul.req { margin:0; padding-left:20px; color:var(--body); } li { margin-bottom:6px; }
-  .card { border-bottom:1px solid var(--edge); padding:0 0 14px; margin-bottom:14px; }
-  .card h3 { margin:0 0 4px; font-size:15px; font-weight:500; color:var(--text); display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-  .card h3 span { color:var(--muted); font:11px var(--mono); }
-  .card ul { margin:6px 0 0; padding-left:20px; } .card p { margin:6px 0 0; }
   a { color:var(--vox); }
-  .back { position:fixed; top:16px; left:clamp(16px,3vw,32px); z-index:2; color:var(--muted); text-decoration:none; font:11px var(--mono); letter-spacing:.04em; text-transform:uppercase; }
+  .back { position:fixed; top:16px; left:clamp(16px,3vw,32px); z-index:3; color:var(--muted); text-decoration:none; font:11px var(--mono); letter-spacing:.04em; text-transform:uppercase; }
   .back:hover { color:var(--text); }
 
-  .word { position:relative; z-index:1; display:block; color:var(--text); font-weight:850; font-stretch:62%; font-size:min(24vw, 36vh); line-height:.74; letter-spacing:-.045em;
-    margin:.08em 0 -.06em -.03em; padding:0 clamp(10px,2vw,24px); white-space:nowrap; user-select:none; overflow:hidden; border-top:1px solid var(--edge2); padding-top:.12em; }
-  .word i { font-style:normal; color:var(--vox); }
-  @media (max-width:760px) { .hero { grid-template-columns:1fr; min-height:0; padding:64px 0 40px; } .hero > div { grid-column:1; } section { margin-left:0; } .word { font-size:25vw; } }
-  @media (prefers-reduced-motion:reduce) { .hero > div, .mosh { animation:none; } }
+  .wrap { position:relative; z-index:1; width:100%; max-width:1160px; margin:0 auto; padding:0 clamp(16px,3vw,32px); }
+  .top { display:grid; grid-template-columns:minmax(280px,5fr) 6fr; gap:clamp(32px,7vw,110px); align-items:center; padding-top:48px; animation:in 260ms cubic-bezier(.2,0,0,1) both; }
+  @keyframes in { from { opacity:0; transform:translateY(10px); } }
+  .logo { width:76px; height:76px; display:block; }
+  h1 { margin:18px 0 10px; color:var(--text); font-weight:850; font-stretch:62%; font-size:clamp(64px,9vw,104px); line-height:.82; letter-spacing:-.04em; }
+  h1 i { font-style:normal; color:var(--vox); }
+  .short { margin:0 0 24px; font-size:17px; color:var(--text); max-width:24em; }
+  .dl { display:flex; justify-content:space-between; align-items:center; gap:16px; background:var(--vox); color:var(--dltext); padding:14px; border-radius:2px; max-width:420px;
+    text-decoration:none; font:500 10.5px var(--mono); letter-spacing:.04em; text-transform:uppercase; transition:background 90ms; }
+  .dl:hover { background:var(--text); color:var(--black); }
+  .dl span { white-space:nowrap; } .dl small { font-weight:400; opacity:.75; text-align:right; }
+  .dl.off { background:transparent; color:var(--muted); border:1px solid var(--edge2); pointer-events:none; }
+
+  .info h2 { color:var(--muted); font-weight:500; margin:0 0 10px; padding-top:8px; border-top:1px solid var(--edge2); }
+  .long { margin:0 0 26px; font-size:16px; color:var(--body); max-width:38em; }
+  .cols { display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+  .info ol, .info ul { margin:0; padding-left:18px; font-size:14px; } .info li { margin-bottom:6px; }
+
+  .bottom { padding-top:28px; padding-bottom:30px; }
+  .label { color:var(--muted); margin:0 0 10px; padding-top:8px; border-top:1px solid var(--edge2); }
+  .stack { position:relative; cursor:pointer; margin-bottom:22px; max-width:640px; outline:none; }
+  .c { border:1px solid var(--edge2); background:#100f0e; border-radius:4px; padding:12px 16px; transition:transform .25s cubic-bezier(.2,0,0,1), border-color .2s; }
+  .c0 { position:relative; z-index:3; }
+  .c1, .c2 { position:absolute; inset:0; padding:0; }
+  .c1 { transform:translateY(8px) scale(.975); z-index:2; } .c2 { transform:translateY(16px) scale(.95); z-index:1; }
+  .stack:hover .c0, .stack:focus-visible .c0 { transform:translateY(-3px); border-color:var(--vox); }
+  .stack:hover .c1, .stack:focus-visible .c1 { transform:translateY(13px) scale(.975); }
+  .stack:hover .c2, .stack:focus-visible .c2 { transform:translateY(26px) scale(.95); }
+  .c h3 { margin:0 0 4px; font-size:15px; font-weight:500; color:var(--text); display:flex; justify-content:space-between; gap:12px; }
+  .c h3 span { color:var(--muted); font:11px var(--mono); }
+  .c .body { max-height:3.3em; overflow:hidden; font-size:13.5px; color:var(--body); }
+  .c .body p, .c .body ul { margin:0; } .c .body ul { padding-left:18px; }
+  .more { display:block; margin-top:8px; color:var(--vox); }
+
+  dialog { width:min(620px, calc(100vw - 32px)); max-height:min(80vh, 720px); background:#100f0e; color:var(--body); border:1px solid var(--edge2); border-radius:6px; padding:0; }
+  dialog::backdrop { background:#000a; }
+  dialog .head { position:sticky; top:0; display:flex; justify-content:space-between; align-items:center; padding:14px 20px; background:#100f0e; border-bottom:1px solid var(--edge2); }
+  dialog .head b { color:var(--text); font-weight:600; font-size:16px; }
+  dialog button { background:none; border:0; color:var(--muted); font:11px var(--mono); text-transform:uppercase; letter-spacing:.04em; cursor:pointer; } dialog button:hover { color:var(--text); }
+  dialog .rel { padding:16px 20px; border-bottom:1px solid var(--edge); }
+  dialog .rel h3 { margin:0 0 6px; font-size:15px; font-weight:500; color:var(--text); display:flex; justify-content:space-between; gap:12px; }
+  dialog .rel h3 span { color:var(--muted); font:11px var(--mono); }
+  dialog .rel p { margin:6px 0 0; } dialog .rel ul { margin:6px 0 0; padding-left:20px; }
+  dialog .foot { padding:16px 20px; }
+
+  @media (max-width:860px) { .top { grid-template-columns:1fr; padding-top:72px; } .cols { grid-template-columns:1fr; } h1 { font-size:72px; } }
+  @media (prefers-reduced-motion:reduce) { .top, .mosh { animation:none; } .c { transition:none; } }
 </style>
 </head>
 <body>
 <a class="back" href="https://interloper.tools">&larr; interloper.tools</a>
 <div class="field" aria-hidden="true"></div><div class="mosh a" aria-hidden="true"></div><div class="mosh b" aria-hidden="true"></div>
-<main>
-  <div class="hero"><div>
-    <svg class="logo" viewBox="0 0 48 48" role="img" aria-label="sever"><defs><clipPath id="A"><rect width="24" height="48"/></clipPath><clipPath id="B"><rect x="24" width="24" height="48"/></clipPath><g id="rec"><circle cx="24" cy="24" r="16" fill="#f4f2ed"/><circle cx="24" cy="24" r="12.2" fill="none" stroke="#0b0a09" stroke-width=".9"/><circle cx="24" cy="24" r="9.6" fill="none" stroke="#0b0a09" stroke-width=".9"/><circle cx="24" cy="24" r="5.2" fill="#e01b2b"/><circle cx="24" cy="24" r="1.2" fill="#0b0a09"/></g></defs><g transform="rotate(22 24 24)"><g transform="translate(-2.4 -2.2)"><g clip-path="url(#A)"><use href="#rec"/></g></g><g transform="translate(2.4 2.2)"><g clip-path="url(#B)"><use href="#rec"/></g></g></g></svg>
-    <h1>Sever the vocals.</h1>
-    <p class="lead">Drop in a song and get the vocals and the music as separate tracks, plus BPM and key. Runs on your own GPU, free and offline.</p>
-    <a class="dl off" id="dl" href="https://github.com/interloperinterloper/sever-releases/releases/latest"><span>Download</span><small id="dlmeta">Looking for the latest version...</small></a>
-  </div></div>
 
-  <section>
-    <h2>How it works</h2>
-    <ol>
-      <li>Run the installer. It sets everything up and downloads the AI model on first start.</li>
-      <li>Drop a song into the window.</li>
-      <li>Mute either track while it plays, download vocals or music, or open an old split from your history.</li>
-    </ol>
-  </section>
-  <section>
-    <h2>Needs</h2>
-    <ul class="req">
-      <li>Windows 10 or 11, 64-bit</li>
-      <li>An NVIDIA graphics card (RTX 50-series supported). Without one it still works, just slowly.</li>
-      <li>About 4 GB of disk space and an internet connection for the first setup</li>
-    </ul>
-  </section>
-  <section>
-    <h2>Changelog</h2>
-    <div id="log"><div class="card"><p>Loading...</p></div></div>
-  </section>
-</main>
-<span class="word" aria-hidden="true">se<i>/</i>ver</span>
+<div class="wrap top">
+  <div>
+    <svg class="logo" viewBox="0 0 48 48" role="img" aria-label="sever"><defs><clipPath id="A"><rect width="24" height="48"/></clipPath><clipPath id="B"><rect x="24" width="24" height="48"/></clipPath><g id="rec"><circle cx="24" cy="24" r="16" fill="#f4f2ed"/><circle cx="24" cy="24" r="12.2" fill="none" stroke="#0b0a09" stroke-width=".9"/><circle cx="24" cy="24" r="9.6" fill="none" stroke="#0b0a09" stroke-width=".9"/><circle cx="24" cy="24" r="5.2" fill="#e01b2b"/><circle cx="24" cy="24" r="1.2" fill="#0b0a09"/></g></defs><g transform="rotate(22 24 24)"><g transform="translate(-2.4 -2.2)"><g clip-path="url(#A)"><use href="#rec"/></g></g><g transform="translate(2.4 2.2)"><g clip-path="url(#B)"><use href="#rec"/></g></g><rect x="23" y="1.5" width="2" height="45" rx="1" fill="#e01b2b"/></g></svg>
+    <h1>se<i>/</i>ver</h1>
+    <p class="short">Splits a song into vocals and music on your own GPU. Also finds its BPM and key.</p>
+    <a class="dl off" id="dl" href="https://github.com/interloperinterloper/sever-releases/releases/latest"><span>Download</span><small id="dlmeta">Looking for the latest version...</small></a>
+  </div>
+  <div class="info">
+    <h2>About</h2>
+    <p class="long">Drop in a song and sever gives you two tracks: the vocals and the music. An open AI model does the work on your own graphics card, about 10 seconds for a normal song. Nothing is uploaded, so it works offline and unreleased tracks stay on your computer. Each track gets a waveform where you can mute it while the song plays, plus its own download button, and your past splits are kept in a history. It also reads the BPM and key, and shows both tempos (for example 86 / 172) when half-time is possible.</p>
+    <div class="cols">
+      <div><h2>How it works</h2><ol><li>Run the installer. It sets everything up and downloads the AI model on first start.</li><li>Drop a song into the window.</li><li>Listen, mute, download or open an old split from the history.</li></ol></div>
+      <div><h2>Needs</h2><ul><li>Windows 10 or 11, 64-bit</li><li>An NVIDIA graphics card (RTX 50-series supported). Without one it still works, just slowly.</li><li>About 4 GB of disk space and internet for the first setup</li></ul></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap bottom">
+  <p class="label">Latest change</p>
+  <div class="stack" id="stack" role="button" tabindex="0" aria-label="Show all changes"><div class="c c0"><p style="margin:0">Loading...</p></div></div>
+</div>
+
+<dialog id="dlg">
+  <div class="head"><b>Changelog</b><form method="dialog"><button>Close</button></form></div>
+  <div id="all"></div>
+  <div class="foot"><a href="https://github.com/interloperinterloper/sever-releases/releases">All releases on GitHub &rarr;</a></div>
+</dialog>
 
 <script>
 const REPO = "interloperinterloper/sever-releases";
@@ -109,6 +128,13 @@ function md(body) {
   }
   return html + (inList ? "</ul>" : "");
 }
+const day = x => new Date(x.published_at).toLocaleDateString();
+const head = x => `<h3>${esc(x.name || x.tag_name)}<span>${day(x)}</span></h3>`;
+
+const open = () => $("#dlg").showModal();
+$("#stack").onclick = open;
+$("#stack").onkeydown = e => { if (e.key == "Enter" || e.key == " ") { e.preventDefault(); open(); } };
+$("#dlg").onclick = e => { if (e.target == $("#dlg")) $("#dlg").close(); };  // click on the backdrop
 
 (async () => {
   try {
@@ -119,12 +145,15 @@ function md(body) {
     const exe = rels[0].assets.find(a => a.name.endsWith(".exe"));
     if (exe) {
       const d = $("#dl"); d.href = exe.browser_download_url; d.classList.remove("off");
-      d.innerHTML = `<span>Download for Windows</span><small>${esc(rels[0].tag_name)} &middot; ${(exe.size / 1048576).toFixed(0)} MB installer &middot; ${new Date(rels[0].published_at).toLocaleDateString()}</small>`;
+      d.innerHTML = `<span>Download for Windows</span><small>${esc(rels[0].tag_name)} &middot; ${(exe.size / 1048576).toFixed(0)} MB &middot; ${day(rels[0])}</small>`;
     }
-    $("#log").innerHTML = rels.map(x => `<div class="card"><h3>${esc(x.name || x.tag_name)}<span>${new Date(x.published_at).toLocaleDateString()}</span></h3>${md(x.body)}</div>`).join("");
+    const n = rels.length - 1;
+    $("#stack").innerHTML = (n > 1 ? '<div class="c c2"></div>' : "") + (n > 0 ? '<div class="c c1"></div>' : "") +
+      `<div class="c c0">${head(rels[0])}<div class="body">${md(rels[0].body)}</div><span class="more">${n ? `${n} earlier version${n > 1 ? "s" : ""}` : "Details"} &rsaquo;</span></div>`;
+    $("#all").innerHTML = rels.map(x => `<div class="rel">${head(x)}${md(x.body)}</div>`).join("");
   } catch (e) {
     $("#dlmeta").textContent = "See all releases on GitHub";
-    $("#log").innerHTML = '<div class="card"><p>Could not load the changelog. See <a href="https://github.com/interloperinterloper/sever-releases/releases">GitHub releases</a>.</p></div>';
+    $("#stack").outerHTML = `<p>No changelog yet. See <a href="https://github.com/${REPO}/releases">GitHub releases</a>.</p>`;
   }
 })();
 </script>
