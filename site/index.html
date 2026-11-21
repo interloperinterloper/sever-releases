@@ -46,6 +46,12 @@
 
   .info h2 { color:var(--muted); font-weight:500; margin:0 0 10px; padding-top:8px; border-top:1px solid var(--edge2); }
   .long { margin:0 0 26px; font-size:16px; color:var(--body); max-width:38em; }
+  .works { margin:0 0 26px; }
+  .info .chips { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 8px; padding:0; list-style:none; font-size:13.5px; }
+  .chips li { display:flex; align-items:center; gap:8px; padding:6px 12px 6px 10px; border:1px solid var(--edge2); border-radius:99px; font-size:13.5px; color:var(--text); }
+  .chips svg { width:16px; height:16px; fill:currentColor; flex:none; }
+  .chips .more { color:var(--muted); border-style:dashed; }
+  .fine { margin:0; font-size:12px; color:var(--muted); max-width:46em; }
   .cols { display:grid; grid-template-columns:1fr 1fr; gap:28px; }
   .info ol, .info ul { margin:0; padding-left:18px; font-size:14px; } .info li { margin-bottom:6px; }
 
@@ -76,6 +82,12 @@
   dialog .rel p { margin:6px 0 0; } dialog .rel ul { margin:6px 0 0; padding-left:20px; }
   dialog .foot { padding:16px 20px; }
 
+  @media (min-width:861px) and (max-height:820px) {
+    .top { padding-top:40px; } .logo { width:60px; height:60px; } h1 { font-size:clamp(52px,7vw,76px); margin:12px 0 8px; } .short { font-size:15.5px; margin-bottom:18px; }
+    .long { font-size:14px; margin-bottom:14px; } .works { margin-bottom:14px; } .info h2 { margin-bottom:6px; }
+    .chips { gap:6px; } .chips li { padding:4px 10px 4px 8px; font-size:12.5px; } .cols { gap:20px; } .info ol, .info ul { font-size:13px; } .info li { margin-bottom:3px; }
+    .bottom { padding-top:16px; padding-bottom:20px; } .c { padding:9px 14px; } .stack { margin-bottom:18px; } .c .body { font-size:13px; }
+  }
   @media (max-width:860px) { .top { grid-template-columns:1fr; padding-top:72px; } .cols { grid-template-columns:1fr; } h1 { font-size:72px; } }
   @media (prefers-reduced-motion:reduce) { .top, .mosh { animation:none; } .c { transition:none; } }
 </style>
@@ -94,6 +106,7 @@
   <div class="info">
     <h2>About</h2>
     <p class="long">Drop in a song and sever gives you two tracks: the vocals and the music. An open AI model does the work on your own graphics card, about 10 seconds for a normal song. Nothing is uploaded, so it works offline and unreleased tracks stay on your computer. Each track gets a waveform where you can mute it while the song plays, plus its own download button, and your past splits are kept in a history. It also reads the BPM and key, and shows both tempos (for example 86 / 172) when half-time is possible.</p>
+    
     <div class="cols">
       <div><h2>How it works</h2><ol><li>Run the installer. It sets everything up and downloads the AI model on first start.</li><li>Drop a song into the window.</li><li>Listen, mute, download or open an old split from the history.</li></ol></div>
       <div><h2>Needs</h2><ul><li>Windows 10 or 11, 64-bit</li><li>An NVIDIA graphics card (RTX 50-series supported). Without one it still works, just slowly.</li><li>About 4 GB of disk space and internet for the first setup</li></ul></div>
