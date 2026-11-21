@@ -1,6 +1,6 @@
 {
-  "name": "vocalsplit",
+  "name": "sever",
   "compatibility_date": "2026-11-01",
   "assets": { "directory": "./site" },
-  "routes": [{ "pattern": "vocalsplit.interloper.tools", "custom_domain": true }]
+  "routes": [{ "pattern": "sever.interloper.tools", "custom_domain": true }]
 }

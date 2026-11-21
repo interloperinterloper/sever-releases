@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>vocalsplit</title>
+<title>sever</title>
 <meta name="description" content="Split any song into vocals and music on your own GPU. Also finds BPM and key. Free, local, private.">
 <meta name="theme-color" content="#0b0a09">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23ff6b4a' d='M3 12h3v8H3zM9 7h3v18H9zM15 3h3v12h-3z'/%3E%3Cpath fill='%23f0c35a' d='M18 19h3v10h-3zM24 11h3v14h-3z'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cdefs%3E%3CclipPath id='A'%3E%3Crect width='24' height='48'/%3E%3C/clipPath%3E%3CclipPath id='B'%3E%3Crect x='24' width='24' height='48'/%3E%3C/clipPath%3E%3C/defs%3E%3Crect width='48' height='48' rx='10' fill='%230b0a09'/%3E%3Cg transform='rotate(22 24 24)'%3E%3Cg transform='translate(-2.6 -2)'%3E%3Cg clip-path='url(%23A)'%3E%3Ccircle cx='24' cy='24' r='15' fill='%23f4f2ed'/%3E%3C/g%3E%3C/g%3E%3Cg transform='translate(2.6 2)'%3E%3Cg clip-path='url(%23B)'%3E%3Ccircle cx='24' cy='24' r='15' fill='%23f4f2ed'/%3E%3C/g%3E%3C/g%3E%3Crect x='23' y='2' width='2' height='44' rx='1' fill='%23e01b2b'/%3E%3C/g%3E%3C/svg%3E">
 <style>
   :root { --black:#0b0a09; --text:#f4f2ed; --body:#bdb9b1; --muted:#8c8880; --faint:#57544f; --edge:#f4f2ed1a; --edge2:#f4f2ed38;
-    --vox:#ff6b4a; --mus:#f0c35a; --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace; color-scheme:dark; }
+    --vox:#e01b2b; --mus:#e01b2b; --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace; color-scheme:dark; }
   * { box-sizing:border-box; }
   ::selection { background:var(--vox); color:var(--black); }
   html, body { margin:0; background:var(--black); color:var(--body); -webkit-font-smoothing:antialiased; font:15px/1.55 Archivo, system-ui, sans-serif; font-stretch:92%; }
@@ -35,7 +35,7 @@
   .logo { width:56px; height:56px; display:block; }
   h1 { margin:22px 0 10px; color:var(--text); font-weight:600; font-size:34px; line-height:1; letter-spacing:-.025em; font-stretch:75%; }
   .lead { margin:0 0 28px; color:var(--body); font-size:16px; }
-  .dl { display:flex; justify-content:space-between; align-items:center; gap:16px; background:var(--vox); color:var(--black); padding:14px; border-radius:2px;
+  .dl { display:flex; justify-content:space-between; align-items:center; gap:16px; background:var(--vox); color:#fff; padding:14px; border-radius:2px;
     text-decoration:none; font:500 10.5px var(--mono); letter-spacing:.04em; text-transform:uppercase; transition:background 90ms; }
   .dl:hover { background:var(--text); }
   .dl span { white-space:nowrap; } .dl small { font-weight:400; opacity:.7; text-align:right; }
@@ -64,14 +64,10 @@
 <div class="field" aria-hidden="true"></div><div class="mosh a" aria-hidden="true"></div><div class="mosh b" aria-hidden="true"></div>
 <main>
   <div class="hero"><div>
-    <svg class="logo" viewBox="0 0 44 44" role="img" aria-label="vocalsplit">
-      <defs><clipPath id="L"><polygon points="0,0 27,0 17,44 0,44"/></clipPath><clipPath id="R"><polygon points="31,0 44,0 44,44 21,44"/></clipPath></defs>
-      <g clip-path="url(#L)" fill="#ff6b4a"><rect x="2" y="16" width="5" height="12" rx="2"/><rect x="10" y="8" width="5" height="28" rx="2"/><rect x="18" y="2" width="5" height="40" rx="2"/></g>
-      <g clip-path="url(#R)" fill="#f0c35a"><rect x="22" y="12" width="5" height="20" rx="2"/><rect x="30" y="6" width="5" height="32" rx="2"/><rect x="38" y="15" width="5" height="14" rx="2"/></g>
-    </svg>
-    <h1>Split any song.</h1>
+    <svg class="logo" viewBox="0 0 48 48" role="img" aria-label="sever"><defs><clipPath id="A"><rect width="24" height="48"/></clipPath><clipPath id="B"><rect x="24" width="24" height="48"/></clipPath></defs><g transform="rotate(22 24 24)"><g transform="translate(-2.6 -2)"><g clip-path="url(#A)"><circle cx="24" cy="24" r="15" fill="#f4f2ed"/></g></g><g transform="translate(2.6 2)"><g clip-path="url(#B)"><circle cx="24" cy="24" r="15" fill="#f4f2ed"/></g></g><rect x="23" y="2" width="2" height="44" rx="1" fill="#e01b2b"/></g></svg>
+    <h1>Sever the vocals.</h1>
     <p class="lead">Drop in a song and get the vocals and the music as separate tracks, plus BPM and key. Runs on your own GPU, free and offline.</p>
-    <a class="dl off" id="dl" href="https://github.com/interloperinterloper/vocalsplit-releases/releases/latest"><span>Download</span><small id="dlmeta">Looking for the latest version...</small></a>
+    <a class="dl off" id="dl" href="https://github.com/interloperinterloper/sever-releases/releases/latest"><span>Download</span><small id="dlmeta">Looking for the latest version...</small></a>
   </div></div>
 
   <section>
@@ -95,10 +91,10 @@
     <div id="log"><div class="card"><p>Loading...</p></div></div>
   </section>
 </main>
-<span class="word" aria-hidden="true">vocal<i>/</i>split</span>
+<span class="word" aria-hidden="true">se<i>/</i>ver</span>
 
 <script>
-const REPO = "interloperinterloper/vocalsplit-releases";
+const REPO = "interloperinterloper/sever-releases";
 const $ = s => document.querySelector(s);
 const esc = s => s.replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
 
@@ -128,7 +124,7 @@ function md(body) {
     $("#log").innerHTML = rels.map(x => `<div class="card"><h3>${esc(x.name || x.tag_name)}<span>${new Date(x.published_at).toLocaleDateString()}</span></h3>${md(x.body)}</div>`).join("");
   } catch (e) {
     $("#dlmeta").textContent = "See all releases on GitHub";
-    $("#log").innerHTML = '<div class="card"><p>Could not load the changelog. See <a href="https://github.com/interloperinterloper/vocalsplit-releases/releases">GitHub releases</a>.</p></div>';
+    $("#log").innerHTML = '<div class="card"><p>Could not load the changelog. See <a href="https://github.com/interloperinterloper/sever-releases/releases">GitHub releases</a>.</p></div>';
   }
 })();
 </script>
