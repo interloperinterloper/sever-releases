@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0b0a09">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cdefs%3E%3CclipPath id='A'%3E%3Crect width='24' height='48'/%3E%3C/clipPath%3E%3CclipPath id='B'%3E%3Crect x='24' width='24' height='48'/%3E%3C/clipPath%3E%3C/defs%3E%3Crect width='48' height='48' rx='10' fill='%230b0a09'/%3E%3Cg transform='rotate(22 24 24)'%3E%3Cg transform='translate(-2.6 -2)'%3E%3Cg clip-path='url(%23A)'%3E%3Ccircle cx='24' cy='24' r='15' fill='%23f4f2ed'/%3E%3C/g%3E%3C/g%3E%3Cg transform='translate(2.6 2)'%3E%3Cg clip-path='url(%23B)'%3E%3Ccircle cx='24' cy='24' r='15' fill='%23f4f2ed'/%3E%3C/g%3E%3C/g%3E%3Crect x='23' y='2' width='2' height='44' rx='1' fill='%23e01b2b'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cdefs%3E%3CclipPath id='A'%3E%3Crect width='24' height='48'/%3E%3C/clipPath%3E%3CclipPath id='B'%3E%3Crect x='24' width='24' height='48'/%3E%3C/clipPath%3E%3Cg id='rec'%3E%3Ccircle cx='24' cy='24' r='16' fill='%23f4f2ed'/%3E%3Ccircle cx='24' cy='24' r='12.2' fill='none' stroke='%230b0a09' stroke-width='.9'/%3E%3Ccircle cx='24' cy='24' r='9.6' fill='none' stroke='%230b0a09' stroke-width='.9'/%3E%3Ccircle cx='24' cy='24' r='5.2' fill='%23e01b2b'/%3E%3Ccircle cx='24' cy='24' r='1.2' fill='%230b0a09'/%3E%3C/g%3E%3C/defs%3E%3Crect width='48' height='48' rx='10' fill='%230b0a09'/%3E%3Cg transform='rotate(22 24 24)'%3E%3Cg transform='translate(-2.4 -2.2)'%3E%3Cg clip-path='url(%23A)'%3E%3Cuse href='%23rec'/%3E%3C/g%3E%3C/g%3E%3Cg transform='translate(2.4 2.2)'%3E%3Cg clip-path='url(%23B)'%3E%3Cuse href='%23rec'/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E">
 <style>
   :root { --black:#0b0a09; --text:#f4f2ed; --body:#bdb9b1; --muted:#8c8880; --faint:#57544f; --edge:#f4f2ed1a; --edge2:#f4f2ed38;
     --vox:#e01b2b; --mus:#e01b2b; --mono:'IBM Plex Mono', ui-monospace, Menlo, monospace; color-scheme:dark; }
@@ -32,7 +32,7 @@
   .hero { min-height:78vh; display:grid; grid-template-columns:repeat(4,1fr); gap:16px; align-items:center; }
   .hero > div { grid-column:2 / span 2; max-width:460px; animation:in 260ms cubic-bezier(.2,0,0,1) both; }
   @keyframes in { from { opacity:0; transform:translateY(10px); } }
-  .logo { width:56px; height:56px; display:block; }
+  .logo { width:76px; height:76px; display:block; }
   h1 { margin:22px 0 10px; color:var(--text); font-weight:600; font-size:34px; line-height:1; letter-spacing:-.025em; font-stretch:75%; }
   .lead { margin:0 0 28px; color:var(--body); font-size:16px; }
   .dl { display:flex; justify-content:space-between; align-items:center; gap:16px; background:var(--vox); color:#fff; padding:14px; border-radius:2px;
@@ -64,7 +64,7 @@
 <div class="field" aria-hidden="true"></div><div class="mosh a" aria-hidden="true"></div><div class="mosh b" aria-hidden="true"></div>
 <main>
   <div class="hero"><div>
-    <svg class="logo" viewBox="0 0 48 48" role="img" aria-label="sever"><defs><clipPath id="A"><rect width="24" height="48"/></clipPath><clipPath id="B"><rect x="24" width="24" height="48"/></clipPath></defs><g transform="rotate(22 24 24)"><g transform="translate(-2.6 -2)"><g clip-path="url(#A)"><circle cx="24" cy="24" r="15" fill="#f4f2ed"/></g></g><g transform="translate(2.6 2)"><g clip-path="url(#B)"><circle cx="24" cy="24" r="15" fill="#f4f2ed"/></g></g><rect x="23" y="2" width="2" height="44" rx="1" fill="#e01b2b"/></g></svg>
+    <svg class="logo" viewBox="0 0 48 48" role="img" aria-label="sever"><defs><clipPath id="A"><rect width="24" height="48"/></clipPath><clipPath id="B"><rect x="24" width="24" height="48"/></clipPath><g id="rec"><circle cx="24" cy="24" r="16" fill="#f4f2ed"/><circle cx="24" cy="24" r="12.2" fill="none" stroke="#0b0a09" stroke-width=".9"/><circle cx="24" cy="24" r="9.6" fill="none" stroke="#0b0a09" stroke-width=".9"/><circle cx="24" cy="24" r="5.2" fill="#e01b2b"/><circle cx="24" cy="24" r="1.2" fill="#0b0a09"/></g></defs><g transform="rotate(22 24 24)"><g transform="translate(-2.4 -2.2)"><g clip-path="url(#A)"><use href="#rec"/></g></g><g transform="translate(2.4 2.2)"><g clip-path="url(#B)"><use href="#rec"/></g></g></g></svg>
     <h1>Sever the vocals.</h1>
     <p class="lead">Drop in a song and get the vocals and the music as separate tracks, plus BPM and key. Runs on your own GPU, free and offline.</p>
     <a class="dl off" id="dl" href="https://github.com/interloperinterloper/sever-releases/releases/latest"><span>Download</span><small id="dlmeta">Looking for the latest version...</small></a>
