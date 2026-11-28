@@ -17,10 +17,7 @@
   html, body { margin:0; background:var(--black); color:var(--body); -webkit-font-smoothing:antialiased; font:16.5px/1.55 Archivo, system-ui, sans-serif; font-stretch:92%; }
   body { position:relative; min-height:100vh; display:grid; grid-template-rows:1fr auto; overflow-x:hidden; }
   .mono, h2, .dl small, .more, .label { font-family:var(--mono); font-size:12px; letter-spacing:.04em; text-transform:uppercase; font-stretch:normal; }
-  .waves { position:fixed; inset:0; width:100%; height:100%; pointer-events:none;
-    -webkit-mask:radial-gradient(ellipse 80% 70% at 30% 45%, rgba(0,0,0,.45) 15%, #000 80%); mask:radial-gradient(ellipse 80% 70% at 30% 45%, rgba(0,0,0,.45) 15%, #000 80%); }
-  body::after { content:""; position:fixed; inset:0; pointer-events:none; opacity:.03; mix-blend-mode:overlay;
-    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+  .waves { position:fixed; inset:0; width:100%; height:100%; pointer-events:none; }
   a { color:var(--vox); }
   .back { position:fixed; top:16px; left:clamp(16px,3vw,32px); z-index:3; color:var(--muted); text-decoration:none; font:11px var(--mono); letter-spacing:.04em; text-transform:uppercase; }
   .back:hover { color:var(--text); }
@@ -171,38 +168,48 @@ $("#dlg").onclick = e => { if (e.target == $("#dlg")) $("#dlg").close(); };  // 
 })();
 </script>
 <script>
-(()=>{const c=document.getElementById('waves'),x=c.getContext('2d'),S=14,
+(()=>{const c=document.getElementById('waves'),x=c.getContext('2d'),S=14,NB=8,
   acc=getComputedStyle(document.documentElement).getPropertyValue('--vox').trim()||'#b6ff3b',
   still=matchMedia('(prefers-reduced-motion:reduce)').matches;
-  let W,H,D,raf;
-  function size(){D=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;c.width=W*D;c.height=H*D;x.setTransform(D,0,0,D,0,0);}
+  let W,H,raf,last=0,run=false;
+  const P=[],Q=[];for(let k=0;k<NB;k++){P.push([]);Q.push([]);}
+  const hs=(a,b)=>{const n=Math.sin(a*127.1+b*311.7)*43758.5453;return n-Math.floor(n);};
+  const cl=v=>v<0?0:v>1?1:v, sm=v=>{v=cl(v);return v*v*(3-2*v);};
+  function size(){W=innerWidth;H=innerHeight;c.width=W;c.height=H;}
   function draw(t){
     x.clearRect(0,0,W,H);
-    const hs=(a,b)=>{const n=Math.sin(a*127.1+b*311.7)*43758.5453;return n-Math.floor(n);};
-    const sm=v=>v<=0?0:v>=1?1:v*v*(3-2*v);
+    for(let k=0;k<NB;k++){P[k].length=0;Q[k].length=0;}
     for(let i=0;i*S<W+S*2;i++)for(let j=-3;j*S<H+S*3;j++){
       const px=i*S,py=j*S;
-      /* soft background swell from two directions, always present */
       const soft=(Math.sin(py*.007+px*.003-t*.00045)+Math.sin(px*.006-py*.002+t*.00035)+2)/4;
-      /* breaking swell train, rolls toward the bottom of the screen */
-      let ph=py*.0046+px*.0011+Math.sin(px*.006+t*.0003)*.3+Math.sin(py*.002-t*.0002)*.25-t*.00022;
+      const ph=py*.0046+px*.0011+Math.sin(px*.006+t*.0003)*.3+Math.sin(py*.002-t*.0002)*.25-t*.00022;
       const u=ph-Math.floor(ph),B=.76;
       const saw=u<B?Math.pow(u/B,1.8):Math.pow(1-(u-B)/(1-B),.7);
-      /* slow patchy mask: where and when the waves break (drifts across the sea) */
       const m=sm((Math.sin(px*.0035+t*.00021)+Math.sin(py*.0028-t*.00017+1.7)+Math.sin((px+py)*.0021+t*.00013+4)+.7)/2.2);
       const hv=soft*(1-m)+saw*m;
       const f=m*(u>B-.03&&u<.97?Math.sin((u-B+.03)/(.97-B+.03)*Math.PI):0);
-      const r=hs(i,j);
-      const dx=(r-.5)*f*6,dy=-hv*11+f*(5+r*10)-f*r*r*r*14;
-      x.globalAlpha=Math.min(.08+hv*hv*.2+f*(.2+r*.3),.6);
-      x.fillStyle=f>.4&&r>.9?acc:'#cfd6d8';
-      x.beginPath();x.arc(px+dx,py+dy,.7+hv*.4+f*r*.9,0,6.283);x.fill();
+      const r=hs(i,j),ex=px/W-.3,ey=(py/H-.45)/.9;
+      const vg=.45+.55*cl((Math.sqrt(ex*ex/.64+ey*ey)-.15)/.65);
+      const a=Math.min(.08+hv*hv*.2+f*(.2+r*.3),.6)*vg;
+      const k=Math.min(NB-1,(a/.6*NB)|0),arr=(f>.4&&r>.9)?Q[k]:P[k];
+      arr.push(px+(r-.5)*f*6,py-hv*11+f*(5+r*10)-f*r*r*r*14,.7+hv*.4+f*r*.9);
     }
-    if(!still)raf=requestAnimationFrame(draw);
+    for(let k=0;k<NB;k++)for(let z=0;z<2;z++){
+      const arr=z?Q[k]:P[k];if(!arr.length)continue;
+      x.globalAlpha=(k+.5)/NB*.6;x.fillStyle=z?acc:'#cfd6d8';x.beginPath();
+      for(let n=0;n<arr.length;n+=3){x.moveTo(arr[n]+arr[n+2],arr[n+1]);x.arc(arr[n],arr[n+1],arr[n+2],0,6.283);}
+      x.fill();
+    }
   }
-  size();addEventListener('resize',()=>{size();if(still)draw(0);});
-  document.addEventListener('visibilitychange',()=>{cancelAnimationFrame(raf);if(!document.hidden&&!still)raf=requestAnimationFrame(draw);});
-  draw(0);
+  /* ~24 fps is plenty for slow waves; stops when the tab is hidden or the window loses focus */
+  function frame(ts){raf=requestAnimationFrame(frame);if(ts-last<41)return;last=ts;draw(ts);}
+  function go(){if(still||run||document.hidden||!document.hasFocus())return;run=true;raf=requestAnimationFrame(frame);}
+  function stop(){run=false;cancelAnimationFrame(raf);}
+  size();draw(0);
+  addEventListener('resize',()=>{size();draw(last);});
+  addEventListener('focus',go);addEventListener('blur',stop);
+  document.addEventListener('visibilitychange',()=>document.hidden?stop():go());
+  go();
 })();
 </script>
 </body>
